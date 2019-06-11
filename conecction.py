@@ -1,6 +1,7 @@
 import mysql.connector
 from mysql.connector import Error
 from mysql.connector import errorcode
+from tkinter import *
 
 def table_creation():
   mydb = mysql.connector.connect(
@@ -11,9 +12,8 @@ def table_creation():
   )
 
   mycursor = mydb.cursor()
-
+  #Creates database
   #mycursor.execute("CREATE DATABASE bancoImagenes")
-
   #mycursor.execute("CREATE TABLE ChichenImgs ( img_name VARCHAR(130) PRIMARY KEY, photo LONGBLOB , tags_file BLOB , tags VARCHAR(130))")
 
 def convertToBinaryData(filename):
@@ -52,5 +52,45 @@ def insertBLOB(img_name,photo, tags_txt, tags):
             print("MySQL connection is closed")
 
 
-def searchImg(tag):
+def searchImg(tag, frame2):
     print('searching')
+    try:
+        connection = mysql.connector.connect(host='localhost',
+                             database='bancoImagenes',
+                             user='rooty@localhost',
+                             password='root')
+
+        cursor = connection.cursor(prepared=True)
+
+        tag = tag.get()
+        sql_search_query = "SELECT img_name FROM ChichenImgs WHERE tags = '" + tag +"'"
+        cursor.execute(sql_search_query)
+        result= cursor.fetchall()
+        results = []
+        total = cursor.rowcount
+        print("Número total de imágenes:  ", total)
+        for i in range (total):
+            imgName= result[i][0].decode()
+            results.append(imgName)
+
+        print(results)
+        #frame2.geometry("100x100+500+100")
+        listbox = Listbox(frame2)
+        listbox.grid(row=3, column=2)
+
+        for x in results:
+            listbox.insert(END,x)
+
+
+
+    except mysql.connector.Error as error :
+        connection.rollback()
+        print("Failed search into MySQL table {}".format(error))
+    finally:
+        #closing database connection.
+        if(connection.is_connected()):
+            cursor.close()
+            connection.close()
+            print("MySQL connection is closed")
+
+#searchImg('mujer')
