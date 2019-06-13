@@ -1,4 +1,3 @@
-
 import tkinter
 from tkinter import *
 from PIL import ImageTk, Image
@@ -24,6 +23,3 @@ def open_img(root):
     panel.image = img                                    #Displays the image
     panel.grid(pady=10, padx= 50, row=20, column=2)
     return imgCV,filename
-
-def hola():
-    print('hola')
