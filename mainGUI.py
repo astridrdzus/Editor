@@ -1,12 +1,16 @@
 import tkinter
-from tkinter import filedialog
-#from tkinter import Image
+from tkinter import *
 from PIL import ImageTk, Image
-#import PIL.Image
-#import Image, ImageTk
+from tkinter import filedialog
+from openImg_Script import open_img
 
 import cv2
 from conecction import *
+
+def openImg(root):
+    imgCV, filename = open_img(root)
+    btn2 = Button(root, text='Etiquetar', command=lambda: tag(imgCV, filename))
+    btn2.grid(pady=20, row=20, column=1)
 
 def define_rect(image):
     """
@@ -111,19 +115,6 @@ def tag(image, filename):
     saveButton =Button(root, text = 'Guardar', command = lambda : saveTag(tagStr,points, tagName, filename, imgIDname))
     saveButton.grid(row = 42, column=2)
 
-def open_img():
-    filename = filedialog.askopenfilename(title='Abrir imagen')   #Search for file
-    print(filename)
-    imgCV = cv2.imread(filename)
-    print('what')
-    img = Image.open(filename)
-    img = img.resize((400, 400), Image.ANTIALIAS)
-    img = ImageTk.PhotoImage(img)
-    panel = Label(root, image=img )
-    panel.image = img                                    #Displays the image
-    panel.grid(pady=10, padx= 50, row=20, column=2)
-    btn2 = Button(root, text='Etiquetar', command=lambda: tag(imgCV, filename))
-    btn2.grid(pady=20, row=20, column=1)
 
 def search():
 
@@ -138,6 +129,7 @@ def search():
     tagNameF.grid(pady=5, row=1, column=2, sticky=W + E)
     searchTagBtn = Button(frame2, text= 'Buscar', command = lambda :searchImg(tagNameF, frame2) ,width= 15)
     searchTagBtn.grid(pady=10, row=2, column=2, sticky= W+E)
+    tagNameF.delete(0, 'end')
 
 
 
@@ -147,7 +139,7 @@ root.geometry("1000x1000+180+100")
 root.title("Editor")
 root.resizable(width=True, height=True)
 
-btn1 = Button(root, text='Abrir imagen', command= open_img, width=15)
+btn1 = Button(root, text='Abrir imagen', command= lambda: openImg(root), width=15)
 btn1.grid(pady=10, row=5,column=1,sticky=W)
 searchBtn = Button(root, text= 'Buscar imágenes', command= lambda: search(), width=15)
 searchBtn.grid(pady=10, row=10, column=1, sticky=W)
