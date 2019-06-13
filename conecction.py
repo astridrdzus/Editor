@@ -1,7 +1,8 @@
+from tkinter import *
 import mysql.connector
 from mysql.connector import Error
 from mysql.connector import errorcode
-from tkinter import *
+
 
 def table_creation():
   mydb = mysql.connector.connect(
@@ -13,8 +14,8 @@ def table_creation():
 
   mycursor = mydb.cursor()
   #Creates database
-  #mycursor.execute("CREATE DATABASE bancoImagenes")
-  #mycursor.execute("CREATE TABLE ChichenImgs ( img_name VARCHAR(130) PRIMARY KEY, photo LONGBLOB , tags_file BLOB , tags VARCHAR(130))")
+  mycursor.execute("CREATE DATABASE bancoImagenes")
+  mycursor.execute("CREATE TABLE ChichenImgs ( img_name VARCHAR(130) PRIMARY KEY, photo LONGBLOB , tags_file BLOB , tags VARCHAR(130))")
 
 def convertToBinaryData(filename):
     #Convert digital data to binary format
@@ -93,4 +94,4 @@ def searchImg(tag, frame2):
             connection.close()
             print("MySQL connection is closed")
 
-#searchImg('mujer')
+#table_creation()
